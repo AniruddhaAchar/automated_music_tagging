@@ -45,7 +45,7 @@ def getTrackDetails(tracks):
 user_name = "Aniruddha"
 scope = 'user-library-read'
 redirect = "http://localhost:8080/callback"
-client_credentials_manager = SpotifyClientCredentials(client_id='3d7faefb8409449e8c8d8ca800bf2f5a',client_secret='ac202cb275c7480aaf162ca99b98688c')
+client_credentials_manager = SpotifyClientCredentials(client_id='3d7faefb8409449e8c8d8ca800bf2f5a',client_secret='')
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 sp.trace = False
 added_list = []
