@@ -10,8 +10,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 import numpy as np
-from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import f_classif
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn import preprocessing
 from sklearn.externals import joblib
@@ -32,19 +30,19 @@ for key in training_data_map:
         Y.append(key)
 
 min_max_scaler = preprocessing.MinMaxScaler()
-X = preprocessing.scale(X)
-Y = np.asarray(Y)
 
-'''Knnclf = KNeighborsClassifier(n_neighbors=3)
+print(Y[-1])
+scaler = preprocessing.StandardScaler().fit(X)
+X = scaler.transform(X)
+print(X[-1])
+Y = np.asarray(Y)
+Knnclf = KNeighborsClassifier(n_neighbors=3)
 Knnclf.fit(X, Y)
 svmclf = SVC(C=2.015, gamma=0.005, decision_function_shape='ovo')
 svmclf.fit(X, Y)
 svmclf.decision_function(X)
 gnbclf = GaussianNB()
-gnbclf.fit(X, Y)'''
-knnclf = joblib.load('knnClassifier.pkl')
-svmclf = joblib.load('svmClassifier.pkl')
-gnbclf = joblib.load('gnbClassifier.pkl')
+gnbclf.fit(X, Y)
 dtclf = tree.DecisionTreeClassifier(criterion='entropy')
 dtclf.fit(X, Y)
 rfclf = RandomForestClassifier(n_estimators=100, criterion="entropy", max_features='auto', random_state=1)
@@ -57,9 +55,12 @@ MLclf = MLPClassifier(solver='lbfgs', alpha=1e-5,
                       hidden_layer_sizes=(5, 25), random_state=1, warm_start=True)
 for i in range(10):
     MLclf.fit(X, Y)
-'''joblib.dump(svmclf, 'svmClassifier.pkl')
-joblib.dump(Knnclf, 'knnClassifier.pkl')
-joblib.dump(gnbclf, 'gnbClassifier.pkl')'''
+joblib.dump(svmclf, 'svm_Classifier_track.pkl')
+joblib.dump(Knnclf, 'kNeighbors_Classifier_track.pkl')
+joblib.dump(gnbclf, 'gaussian_NB_Classifier_track.pkl')
+joblib.dump(rfclf, 'random_forest_Classifier_track.pkl')
+joblib.dump(etclf, 'extra_tree_classifier_track.pkl')
+joblib.dump(scaler, 'scaler_track.pkl')
 
 XTest = []
 YTrue = []
@@ -69,9 +70,8 @@ for key in testing_data_map:
     for ele in temp:
         YTrue.append(key)
 
-XTest = preprocessing.scale(XTest)
-
-KnnYPred = knnclf.predict(XTest)
+XTest = scaler.transform(XTest)
+KnnYPred = Knnclf.predict(XTest)
 knnlist = KnnYPred.tolist()
 
 svmYPred = svmclf.predict(XTest)
@@ -100,3 +100,4 @@ print("ETaccuracy = {}% ".format(accuracy_score(YTrue, etYpred) * 100))
 print("GBaccuracy = {}% ".format(accuracy_score(YTrue, gbYpred) * 100))
 print("MCaccuracy = {}% ".format(accuracy_score(YTrue, mplclf) * 100))
 print("NNaccuracy = {}%".format(accuracy_score(YTrue,MLYpred)*100))
+print("RF importance", rfclf.feature_importances_)

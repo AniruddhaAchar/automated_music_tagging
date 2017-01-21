@@ -1,4 +1,5 @@
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.externals import joblib
 from sklearn.metrics import accuracy_score
 from sklearn.neighbors import KNeighborsClassifier
 from Database_connections import getAudioData
@@ -25,8 +26,8 @@ for key in training_data_map:
     for ele in temp:
         Y.append(key)
 
-min_max_scaler = preprocessing.MinMaxScaler()
-X = preprocessing.scale(X)
+scaler = preprocessing.StandardScaler().fit(X)
+X = scaler.transform(X)
 Y = np.asarray(Y)
 
 XTest = []
@@ -37,7 +38,7 @@ for key in testing_data_map:
     for ele in temp:
         YTrue.append(key)
 
-XTest = preprocessing.scale(XTest)
+XTest = scaler.transform(XTest)
 
 Knnclf = KNeighborsClassifier(n_neighbors=3)
 Knnclf.fit(X, Y)
@@ -57,6 +58,11 @@ for i in range(10):
     MLclf.fit(X, Y)
 
 
+joblib.dump(svmclf,"SVM_audio.pkl")
+joblib.dump(MLclf, 'Neural_Network_audio.pkl')
+joblib.dump(gnbclf,'GaussianNB_audio.pkl')
+joblib.dump(Knnclf, 'KNeighbors_audio.pkl')
+joblib.dump(scaler, 'scaler_audio.pkl')
 
 KnnYPred = Knnclf.predict(XTest)
 knnlist = KnnYPred.tolist()
