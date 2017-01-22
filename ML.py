@@ -1,3 +1,5 @@
+from collections import Counter
+
 from sklearn.neural_network import MLPClassifier
 
 from Database_connections import getData, getTestData
@@ -91,6 +93,13 @@ classif.fit(X, Y)
 mplclf = classif.predict(XTest)
 MLYpred = MLclf.predict(XTest)
 MLYpred = MLYpred.tolist()
+combinedYPred =[]
+for s,e,r in zip(svmlist, etlist, rflist):
+    predictions=[s,e,r]
+    votes = Counter(predictions)
+    activity, count = votes.most_common()[0]
+    combinedYPred.append(activity)
+
 print("kNN accuracy = {}% ".format(accuracy_score(YTrue, KnnYPred) * 100))
 print("SVM accuracy = {}% ".format(accuracy_score(YTrue, svmYPred) * 100))
 print("GNB accuracy = {}% ".format(accuracy_score(YTrue, gnbclfYPred) * 100))
@@ -99,5 +108,6 @@ print("RFaccuracy = {}% ".format(accuracy_score(YTrue, rfYpred) * 100))
 print("ETaccuracy = {}% ".format(accuracy_score(YTrue, etYpred) * 100))
 print("GBaccuracy = {}% ".format(accuracy_score(YTrue, gbYpred) * 100))
 print("MCaccuracy = {}% ".format(accuracy_score(YTrue, mplclf) * 100))
+print("NNaccuracy = {}%".format(accuracy_score(YTrue,MLYpred)*100))
 print("NNaccuracy = {}%".format(accuracy_score(YTrue,MLYpred)*100))
 print("RF importance", rfclf.feature_importances_)

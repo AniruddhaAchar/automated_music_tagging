@@ -1,3 +1,4 @@
+from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.externals import joblib
 from sklearn.metrics import accuracy_score
@@ -27,6 +28,7 @@ for key in training_data_map:
         Y.append(key)
 
 scaler = preprocessing.StandardScaler().fit(X)
+print(X)
 X = scaler.transform(X)
 Y = np.asarray(Y)
 
@@ -57,12 +59,14 @@ MLclf = MLPClassifier(solver='lbfgs', alpha=1e-5,
 for i in range(10):
     MLclf.fit(X, Y)
 
+etclf = ExtraTreesClassifier(criterion='entropy', n_estimators=100, max_features='auto')
+etclf.fit(X, Y)
 
-joblib.dump(svmclf,"SVM_audio.pkl")
-joblib.dump(MLclf, 'Neural_Network_audio.pkl')
-joblib.dump(gnbclf,'GaussianNB_audio.pkl')
-joblib.dump(Knnclf, 'KNeighbors_audio.pkl')
-joblib.dump(scaler, 'scaler_audio.pkl')
+##joblib.dump(svmclf,"SVM_audio.pkl")
+#joblib.dump(MLclf, 'Neural_Network_audio.pkl')
+#joblib.dump(gnbclf,'GaussianNB_audio.pkl')
+#joblib.dump(Knnclf, 'KNeighbors_audio.pkl')
+#joblib.dump(scaler, 'scaler_audio.pkl')
 
 KnnYPred = Knnclf.predict(XTest)
 knnlist = KnnYPred.tolist()
@@ -79,8 +83,12 @@ rflist = rfYpred.tolist()
 MLYpred = MLclf.predict(XTest)
 MLYpred = MLYpred.tolist()
 
+etYpred = etclf.predict(XTest)
+etlist = etYpred.tolist()
+
 print("kNN accuracy = {}% ".format(accuracy_score(YTrue, KnnYPred) * 100))
 print("SVM accuracy = {}% ".format(accuracy_score(YTrue, svmYPred) * 100))
 print("GNB accuracy = {}% ".format(accuracy_score(YTrue, gnbclfYPred) * 100))
 print("RFaccuracy = {}% ".format(accuracy_score(YTrue, rfYpred) * 100))
 print("NNaccuracy = {}%".format(accuracy_score(YTrue,MLYpred)*100))
+print("ETaccuracy = {}% ".format(accuracy_score(YTrue, etYpred) * 100))
