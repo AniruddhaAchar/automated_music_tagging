@@ -31,7 +31,7 @@ def get_featured_songs():
             track_name = item.get('track').get('name')
             audio_features = sp.audio_features([item.get('track').get('uri')])[0]
             activity_class = classifier.classify_track(audio_features)
-            details = {'name': track_name, 'artists': artist_names, 'images': images, 'album': album_name, 'activity_class':activity_class}
+            details = {'name': track_name, 'artists': artist_names, 'images': images[1], 'album': album_name, 'activity_class':activity_class}
             track_details.append(details)
     return track_details
 
