@@ -15,9 +15,10 @@ app.config.from_object('config')
 
 @app.route('/index')
 def indexpage():
+    activty_list = ['workout', 'party', 'dinner']
     ftsongs = get_featured_songs()
-
-    return render_template('indexpage.html', ftsongs=ftsongs)
+    #pprint(ftsongs)
+    return render_template('indexpage.html', ftsongs=ftsongs, activity_list=activty_list)
 
 
 def allowed_file(filename):

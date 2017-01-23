@@ -4,11 +4,23 @@
     <meta charset="UTF-8">
     <title>Index</title>
 </head>
-<body>
-{% for item in ftsongs %}
-    <h1>Workout</h1>
-    {% if item['activity_class']=='workout'%}
+{% macro activity_based(activity) %}
+    <h1> {{ activity|upper }} </h1>
+    {% for item in ftsongs %}
+    {% if item['activity_class']==activity %}
+        <br><img src="{{ item['images']['url'] }}" width="{{ item['images']['width'] }}" height="{{ item['images']['height'] }}">
+        <br>Name : {{ item['name'] }}
+        <br>Artist : {{ item['artists']|join(',') }}
+        <br>Album : {{ item['album'] }} <br>
 
+
+    {% endif %}
 {% endfor %}
+{% endmacro %}
+<body>
+{% for i in activity_list %}
+    {{ activity_based(i) }}
+{% endfor %}
+
 </body>
 </html>
