@@ -1,4 +1,4 @@
-from pprint import pprint
+import json
 from Machine_Learning import classifier
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -11,6 +11,7 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 track_details = []
 
+
 def get_featured_songs():
     """
     This function extracts song's details from the featured play lists on Spotify.
@@ -21,11 +22,11 @@ def get_featured_songs():
     for featured_playlist in featured_play_lists:
         play_list_details = sp.user_playlist_tracks(playlist_id=featured_playlist.get('id'),
                                                     user=featured_playlist.get('owner').get('id'), limit=4)
-        #pprint(play_list_details)
         for item in play_list_details.get('items'):
             artist_names = []
             album_name = item.get('track').get('album').get('name')
-            images = item.get('track').get('album').get('images')  # a list if images with the height, width and the url to the image
+            images = item.get('track').get('album').get(
+                'images')  # a list if images with the height, width and the url to the image
             for artist in item.get('track').get('album').get('artists'):
                 artist_names.append(artist.get('name'))
             track_name = item.get('track').get('name')
@@ -35,7 +36,7 @@ def get_featured_songs():
                        'activity_class': activity_class}
             track_details.append(details)
 
-    return track_details
+    return json.dumps(track_details)
 
 
 def search_song(title):
@@ -52,9 +53,6 @@ def search_song(title):
         activity_class = classifier.classify_track(audio_features)
         details = {'name': track_name, 'artists': artist_names, 'images': images, 'activity_class': activity_class}
         track_details.append(details)
-    return track_details
-
+    return json.dumps(track_details)
 
 # todo write api calls for getting details specific to activities.
-# todo write functions to process and classify a given audio file.
-# todo write function to search and the classify track from spotify.

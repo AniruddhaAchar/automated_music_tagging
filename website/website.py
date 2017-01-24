@@ -11,52 +11,48 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from API.spotify_API import get_featured_songs
 from Machine_Learning.audio_feature_extraction import get_audio_features
 
-
 app = Flask(__name__)
 app.config.from_object('config')
 
-scheduler = BackgroundScheduler()
-
-global file_switch  # a variable used to switch between two different cache stored
-file_switch = 0
+scheduler = BackgroundScheduler()  # create a background scheduler task
 
 
-def store_featured_playlist():
-    global file_switch
-    if 0 == file_switch:
-        fs = 1
-    else:
-        fs = 0
-    print(fs, file_switch)
+def cache_featured_playlist():
+    """
+    This function caches the featured playlist. If there are any changes between the current version and the previous
+    version, the file is updated.
+    :return: None
+    """
     featured = get_featured_songs()
     js = json.dumps(featured)
-    if os.path.isfile(app.config['UPLOAD_FOLDER'] + 'featured_playlist' + str(file_switch) + '.json'):
-        with open(app.config['UPLOAD_FOLDER'] + 'featured_playlist{}.json'.format(fs), 'r') as fread:
-            if js == fread.read():
+    if os.path.isfile(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json'):  # check if file exists
+        with open(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json', 'r') as fread:  # get the file where the
+            # cache is stored
+            if js == fread.read():  # if new data and cache are same, do nothing
                 return
-    with open(app.config['UPLOAD_FOLDER'] + 'featured_playlist{}.json'.format(fs), 'w') as fpfile:
+    with open(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json', 'w') as fpfile:  # else update the file
+        fpfile.truncate()
         fpfile.write(js)
-        file_switch = fs
 
-scheduler.add_job(store_featured_playlist, 'interval', minutes=2, id='store_playlist')
-scheduler.start()
 
-atexit.register(lambda: scheduler.shutdown())
+scheduler.add_job(cache_featured_playlist, 'interval', minutes=2, id='store_playlist')  # add a job with target=
+# cache_function, interval = 2 minutes
+scheduler.start()  # start the scheduler
+
+atexit.register(lambda: scheduler.shutdown())  # stop the scheduler when the server stops
 
 
 @app.route('/')
 def index():
-    if not os.path.isfile(app.config['UPLOAD_FOLDER'] + 'featured_playlist' + str(file_switch) + '.json'):
-        print("File not exists")
-        store_featured_playlist()
-        with open(app.config['UPLOAD_FOLDER'] + 'featured_playlist' + str(file_switch) + '.json') as songs:
+    if not os.path.isfile(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json'):
+        cache_featured_playlist()
+        with open(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json') as songs:
             return songs.read()
-    if os.path.getsize(app.config['UPLOAD_FOLDER'] + 'featured_playlist' + str(file_switch) + '.json') <= 0:
-        print("File size zero")
-        store_featured_playlist()
-        with open(app.config['UPLOAD_FOLDER'] + 'featured_playlist' + str(file_switch) + '.json') as songs:
+    if os.path.getsize(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json') <= 0:
+        cache_featured_playlist()
+        with open(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json') as songs:
             return songs.read()
-    with open(app.config['UPLOAD_FOLDER'] + 'featured_playlist' + str(file_switch) + '.json') as songs:
+    with open(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json') as songs:
         return songs.read()
 
 

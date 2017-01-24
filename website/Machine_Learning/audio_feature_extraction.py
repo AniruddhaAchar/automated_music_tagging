@@ -1,3 +1,5 @@
+import json
+
 import librosa
 import numpy as np
 
@@ -24,4 +26,4 @@ def get_audio_features(file_name):
                               mfcc=mfcc.mean(), rmse=rmse.mean(), sbwm=spectral_bandwidth.mean(),
                               srom=spectral_rolloff.mean(),
                               tempo=tempo)
-    return activity
+    return json.dumps(activity)
