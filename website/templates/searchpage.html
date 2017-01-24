@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
+<script type="text/javascript">
+        $(function() {
+			  $('#btn').bind('click', function() {
+			    $('#res').empty();
+				$.getJSON('/background', {
+				  searchstr : $('#searchstr').val(),
+				}, function(data) {
+				    htmltext = "";
+				    image = "";
+				    $('#res').empty();
+                    for( var key in data.result ){
+                     htmltext+='<p>Name : '+ data.result[key].name +'<br>'
+                     htmltext+='Activity : '+ data.result[key].activity_class + '<br>'
+                     htmltext+='Artist : '+data.result[key].artists[0]+ '<br>'
+                     imagestr = JSON.stringify(data.result[key].images.url)
+                     htmltext+="<img src = " + imagestr +" height=300  width=300></p><br>"
+
+                    }
+                    $('#res').append(htmltext);
+
+				});
+				return false;
+			  });
+			});
+</script>
+<body>
+<div id="frm">
+<form>
+    <input type="text" id="searchstr" size="20">
+    <input type="submit" id="btn" >
+</form>
+</div>
+<div id="res">
+
+</div>
+</body>
+</html>

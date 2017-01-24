@@ -36,6 +36,24 @@ def get_featured_songs():
             track_details.append(details)
     return track_details
 
+
+def search_song(title):
+    search_result = sp.search(title, limit=2)
+    items = search_result.get('tracks').get('items')
+    track_details = []
+    for item in items:
+        artist_names = []
+        images = item.get('album').get('images')  # a list if images with the height, width and the
+        for artist in item.get('album').get('artists'):
+            artist_names.append(artist.get('name'))
+        track_name = item.get('name')
+        audio_features = sp.audio_features([item.get('uri')])[0]
+        activity_class = classifier.classify_track(audio_features)
+        # selecting only 300 x 300 url
+        details = {'name': track_name, 'artists': artist_names, 'images': images[1], 'activity_class': activity_class}
+        track_details.append(details)
+    return track_details
+
 # todo write api calls for getting details specific to activities.
 # todo write functions to process and classify a given audio file.
 # todo write function to search and the classify track from spotify.

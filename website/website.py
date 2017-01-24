@@ -1,24 +1,46 @@
 import os
 import json
 from pprint import pprint
-from flask import Flask
+from flask import Flask, jsonify
 from flask import flash
 from flask import render_template
 from flask import request
 from werkzeug.utils import secure_filename, redirect
 from Machine_Learning.audio_feature_extraction import get_audio_features
-from API.spotify_API import get_featured_songs
+from API.spotify_API import get_featured_songs, search_song
+
 
 app = Flask(__name__)
 app.config.from_object('config')
 
 
-@app.route('/index')
+@app.route('/')
 def indexpage():
-    activty_list = ['workout', 'party', 'dinner']
+    t_songs = get_featured_songs()
+    return render_template('indexpage.html', t_songs=t_songs)
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def searchpage():
+    if request.method == 'GET':
+        return render_template("searchpage.html")
+
+
+@app.route('/background')
+def background():
+    s_str = request.args.get('searchstr')
+    s_res = search_song(str(s_str))
+    print(s_str)
+    pprint(s_res)
+    return jsonify(result=s_res)
+
+
+@app.route('/activity')
+def activitypage():
+    activty_list = ['workout', 'party', 'sleep', 'dinner']
     ftsongs = get_featured_songs()
-    #pprint(ftsongs)
-    return render_template('indexpage.html', ftsongs=ftsongs, activity_list=activty_list)
+
+    return render_template('activity_based.html', ftsongs=ftsongs, activity_list=activty_list)
 
 
 def allowed_file(filename):
