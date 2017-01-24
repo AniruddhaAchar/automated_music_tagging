@@ -7,7 +7,6 @@ from config import UPLOAD_FOLDER
 
 def get_audio_features(file_name):
     file_path = UPLOAD_FOLDER + "\\" + file_name
-    print(file_path)
     y, sr = librosa.load(file_path)
     chroma = librosa.feature.chroma_stft(y=y, sr=sr)
     if_gram, D = librosa.ifgram(y)

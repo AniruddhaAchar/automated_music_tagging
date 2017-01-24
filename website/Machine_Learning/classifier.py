@@ -12,7 +12,7 @@ rfclf_track = joblib.load(ROOT_ML + 'random_forest_Classifier_track.pkl')
 
 # audio machine learning algorithms
 scaler_audio = joblib.load(ROOT_ML+'scaler_audio.pkl')
-svmclf_audio = joblib.load(ROOT_ML+'SVM_audio.pkl')
+svmclf_audio = joblib.load(ROOT_ML+'svm_audio.pkl')
 MLclf_audio = joblib.load(ROOT_ML+'Neural_Network_audio.pkl')
 Knnclf_audio = joblib.load(ROOT_ML+'KNeighbors_audio.pkl')
 
