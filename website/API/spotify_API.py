@@ -1,5 +1,4 @@
 import json
-import pprint
 
 from Machine_Learning import classifier
 import spotipy
@@ -58,7 +57,7 @@ def search_song(title):
         activity_class = classifier.classify_track(audio_features)
         details = {'name': track_name, 'artists': artist_names, 'images': images, 'activity_class': activity_class}
         track_details.append(details)
-    return json.dumps(track_details)
+    return track_details
 
 
 def get_category_songs(category):

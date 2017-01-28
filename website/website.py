@@ -1,59 +1,41 @@
-import json
 import os
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask import flash
 from flask import render_template
 from flask import request
+from flask_cors import CORS
 from werkzeug.utils import secure_filename, redirect
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
-from API.spotify_API import get_featured_songs
+from flask_restful import Api
+from API.restful_api import FeaturedPlaylist, CategorySongs, SearchSongs
 from Machine_Learning.audio_feature_extraction import get_audio_features
+from cache_data import cache_featured_playlist, cache_category_songs, get_cache_featured_songs
 
 app = Flask(__name__)
 app.config.from_object('config')
-
+api = Api(app)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 scheduler = BackgroundScheduler()  # create a background scheduler task
-
-
-def cache_featured_playlist():
-    """
-    This function caches the featured playlist. If there are any changes between the current version and the previous
-    version, the file is updated.
-    :return: None
-    """
-    featured = get_featured_songs()
-    js = json.dumps(featured)
-    if os.path.isfile(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json'):  # check if file exists
-        with open(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json', 'r') as fread:  # get the file where the
-            # cache is stored
-            if js == fread.read():  # if new data and cache are same, do nothing
-                return
-    with open(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json', 'w') as fpfile:  # else update the file
-        fpfile.truncate()
-        fpfile.write(js)
-
-
-scheduler.add_job(cache_featured_playlist, 'interval', minutes=2, id='store_playlist')  # add a job with target=
+scheduler.add_job(cache_featured_playlist, 'interval', minutes=10, id='store_playlist')  # add a job with target=
 # cache_function, interval = 2 minutes
+scheduler.add_job(cache_category_songs, 'interval', minutes=20, id='store_cat')
 scheduler.start()  # start the scheduler
 
 atexit.register(lambda: scheduler.shutdown())  # stop the scheduler when the server stops
 
+api.add_resource(FeaturedPlaylist, '/api/v1.0/songs')
+api.add_resource(CategorySongs, '/api/v1.0/cat/<string:category>')
+api.add_resource(SearchSongs, '/api/v1.0/search')
+
 
 @app.route('/')
-def index():
-    if not os.path.isfile(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json'):
-        cache_featured_playlist()
-        with open(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json') as songs:
-            return songs.read()
-    if os.path.getsize(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json') <= 0:
-        cache_featured_playlist()
-        with open(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json') as songs:
-            return songs.read()
-    with open(app.config['UPLOAD_FOLDER'] + '\\featured_playlist.json') as songs:
-        return songs.read()
+def test():
+    return jsonify(get_cache_featured_songs())
+
+
+
 
 
 def allowed_file(filename):
