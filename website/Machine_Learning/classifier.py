@@ -20,6 +20,8 @@ def classify_track(audio_features):
     X = [audio_features['acousticness'], audio_features['danceability'], audio_features['energy'],
          audio_features['instrumentalness'], audio_features['speechiness'], audio_features['tempo'],
          audio_features['valence'], audio_features['loudness']]
+    if None in X:
+        return 0
     X = scaler_track.transform(X)
     X = X.reshape(1, -1)
     svmPred = svmclf_track.predict(X).tolist()[0]
