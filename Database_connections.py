@@ -3,21 +3,21 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, REAL
 from sqlalchemy.orm import sessionmaker
 
-sleep_engine = create_engine('sqlite:///E:\\programming\\python\\Spotify_data_extraction\\sleep_tracks.db', echo=False)
-workout_engine = create_engine('sqlite:///E:\\programming\\python\\Spotify_data_extraction\\workout_tracks.db',
+sleep_engine = create_engine('sqlite:///sleep_tracks.db', echo=False)
+workout_engine = create_engine('sqlite:///workout_tracks.db',
                                echo=False)
-dinner_engine = create_engine('sqlite:///E:\\programming\\python\\Spotify_data_extraction\\dinner_tracks.db',
+dinner_engine = create_engine('sqlite:///dinner_tracks.db',
                               echo=False)
-party_engine = create_engine('sqlite:///E:\\programming\\python\\Spotify_data_extraction\\party_tracks.db', echo=False)
+party_engine = create_engine('sqlite:///party_tracks.db', echo=False)
 
 sleep_audio_engine = create_engine(
-    'sqlite:///E:\\programming\\python\\Spotify_data_extraction\\sleep_audio_features.db', echo=False)
+    'sqlite:///sleep_audio_features.db', echo=False)
 workout_audio_engine = create_engine(
-    'sqlite:///E:\\programming\\python\\Spotify_data_extraction\\workout_audio_features.db', echo=False)
+    'sqlite:///workout_audio_features.db', echo=False)
 party_audio_engine = create_engine(
-    'sqlite:///E:\\programming\\python\\Spotify_data_extraction\\party_audio_features.db', echo=False)
+    'sqlite:///party_audio_features.db', echo=False)
 dinner_audio_engine = create_engine(
-    'sqlite:///E:\\programming\\python\\Spotify_data_extraction\\dinner_audio_features.db', echo=False)
+    'sqlite:///dinner_audio_features.db', echo=False)
 
 Base = declarative_base()
 
