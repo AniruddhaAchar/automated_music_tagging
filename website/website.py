@@ -32,7 +32,7 @@ api.add_resource(SearchSongs, '/api/v1.0/search')
 
 @app.route('/')
 def test():
-    return jsonify(get_cache_featured_songs())
+    return render_template('index.html')
 
 
 

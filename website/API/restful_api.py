@@ -1,4 +1,4 @@
-from flask_restful import Resource, reqparse
+from flask_restful import Resource, reqparse, abort
 
 from API.spotify_API import search_song
 from cache_data import get_cache_featured_songs, get_cached_category_songs
@@ -11,6 +11,8 @@ class FeaturedPlaylist(Resource):
 
 class CategorySongs(Resource):
     def get(self, category):
+        if category not in ['party', 'dinner', 'sleep', 'workout']:
+            abort(404, message="No such category")
         return get_cached_category_songs(category=category)
 
 class SearchSongs(Resource):

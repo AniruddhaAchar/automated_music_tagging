@@ -90,6 +90,7 @@ def get_category_songs(category):
         album_name = recommendation.get('album').get('name')
         audio_features = sp.audio_features(recommendation.get('uri'))[0]
         activity_class = classifier.classify_track(audio_features)
-        details = {'name': track_name, 'artists': artist_names, 'images': images, 'activity_class': activity_class}
+        details = {'name': track_name, 'artists': artist_names, 'images': images, 'activity_class': activity_class,
+                   'album_name': album_name}
         track_details.append(details)
     return json.dumps(track_details)

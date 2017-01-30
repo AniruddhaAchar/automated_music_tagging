@@ -4,16 +4,16 @@ from config import ROOT_ML
 
 activity_map = {1: "dinner", 2: "party", 3: "sleep", 4: "workout"}
 # track machine learning algorithms
-scaler_track = joblib.load(ROOT_ML + 'scaler_track.pkl')
-svmclf_track = joblib.load(ROOT_ML + 'svm_Classifier_track.pkl')
-etclf_track = joblib.load(ROOT_ML + 'extra_tree_classifier_track.pkl')
-rfclf_track = joblib.load(ROOT_ML + 'random_forest_Classifier_track.pkl')
+scaler_track = joblib.load(ROOT_ML + '/scaler_track.pkl')
+svmclf_track = joblib.load(ROOT_ML + '/svm_Classifier_track.pkl')
+etclf_track = joblib.load(ROOT_ML + '/extra_tree_classifier_track.pkl')
+rfclf_track = joblib.load(ROOT_ML + '/random_forest_Classifier_track.pkl')
 
 # audio machine learning algorithms
-scaler_audio = joblib.load(ROOT_ML + 'scaler_audio.pkl')
-svmclf_audio = joblib.load(ROOT_ML + 'svm_audio.pkl')
-MLclf_audio = joblib.load(ROOT_ML + 'Neural_Network_audio.pkl')
-Knnclf_audio = joblib.load(ROOT_ML + 'KNeighbors_audio.pkl')
+scaler_audio = joblib.load(ROOT_ML + '/scaler_audio.pkl')
+svmclf_audio = joblib.load(ROOT_ML + '/svm_audio.pkl')
+MLclf_audio = joblib.load(ROOT_ML + '/Neural_Network_audio.pkl')
+Knnclf_audio = joblib.load(ROOT_ML + '/KNeighbors_audio.pkl')
 
 
 def classify_track(audio_features):

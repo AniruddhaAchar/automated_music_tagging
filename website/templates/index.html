@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>API documentation</title>
+</head>
+<body>
+    <h1>Base API url: /api/v1.0</h1>
+    <h1>Show Featured Songs</h1>
+    <p>Returns Json data about 40 featured songs on Spotify along with the classified activity</p>
+    <ul>
+        <li>
+            <h4>URL</h4>
+        </li>
+        <i>/songs</i>
+        <li>
+            <h4>Method</h4>
+        </li>
+        <i>GET</i>
+    </ul>
+    <h1>Category Songs</h1>
+    <p>Returns Json data about 10 songs of the category</p>
+    <ul>
+        <li>
+            <h4>URL</h4>
+        </li>
+        <i>/cat/<code>category_name</code></i>
+        <li>
+            <h4>Method</h4>
+        </li>
+        <i>GET</i>
+        <li>
+            <h4>Parameters</h4>
+        </li>
+        <p>category_name can be any one of [party, sleep, workout, dinner]</p>
+    </ul>
+    <h1>Search Songs</h1>
+    <p>Returns Json data about 2 songs  with the classified activity</p>
+    <ul>
+        <li>
+            <h4>URL</h4>
+        </li>
+        <i>/search?track={track name}</i>
+        <li>
+            <h4>Method</h4>
+        </li>
+        <p>GET</p>
+        <li>
+            <h4>Parameters</h4>
+        </li>
+        <i>track=[string]</i>
+    </ul>
+</body>
+</html>

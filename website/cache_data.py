@@ -17,12 +17,12 @@ def cache_featured_playlist():
 
 
 def save_cache(data, file_name):
-    if os.path.isfile(ROOT_CACHE + '\\' + file_name):  # check if file exists
-        with open(ROOT_CACHE + '\\' + file_name, 'r') as fread:  # get the file where the
+    if os.path.isfile(ROOT_CACHE + '/' + file_name):  # check if file exists
+        with open(ROOT_CACHE + '/' + file_name, 'r') as fread:  # get the file where the
             # cache is stored
             if data == fread.read():  # if new data and cache are same, do nothing
                 return
-    with open(ROOT_CACHE + '\\' + file_name, 'w') as fpfile:  # else update the file
+    with open(ROOT_CACHE + '/' + file_name, 'w') as fpfile:  # else update the file
         print("Cleaning data")
         fpfile.seek(0)
         fpfile.truncate()
@@ -44,32 +44,32 @@ def cache_category_songs():
 
 
 def get_cache_featured_songs():
-    if not os.path.isfile(ROOT_CACHE + '\\featured_playlist.json'):
+    if not os.path.isfile(ROOT_CACHE + '/featured_playlist.json'):
         cache_featured_playlist()
-        with open(ROOT_CACHE + '\\featured_playlist.json') as songs:
+        with open(ROOT_CACHE + '/featured_playlist.json') as songs:
             temp = json.loads(songs.read())
             return {'songs': temp}
-    if os.path.getsize(ROOT_CACHE + '\\featured_playlist.json') <= 0:
+    if os.path.getsize(ROOT_CACHE + '/featured_playlist.json') <= 0:
         cache_featured_playlist()
-        with open(ROOT_CACHE + '\\featured_playlist.json') as songs:
+        with open(ROOT_CACHE + '/featured_playlist.json') as songs:
             temp = json.loads(songs.read())
             return {'songs': temp}
-    with open(ROOT_CACHE + '\\featured_playlist.json') as songs:
+    with open(ROOT_CACHE + '/featured_playlist.json') as songs:
         temp = json.loads(songs.read())
         return {'songs': temp}
 
 
 def get_cached_category_songs(category):
-    if not os.path.isfile(ROOT_CACHE + '\\' + category + '_songs.json'):
+    if not os.path.isfile(ROOT_CACHE + '/' + category + '_songs.json'):
         cache_category_songs()
-        with open(ROOT_CACHE + '\\' + category + '_songs.json') as songs:
+        with open(ROOT_CACHE + '/' + category + '_songs.json') as songs:
             temp = json.loads(songs.read())
             return {'songs': temp}
-    if os.path.getsize(ROOT_CACHE + '\\' + category + '_songs.json') <= 0:
+    if os.path.getsize(ROOT_CACHE + '/' + category + '_songs.json') <= 0:
         cache_category_songs()
-        with open(ROOT_CACHE + '\\' + category + '_songs.json') as songs:
+        with open(ROOT_CACHE + '/' + category + '_songs.json') as songs:
             temp = json.loads(songs.read())
             return {'songs': temp}
-    with open(ROOT_CACHE + '\\' + category + '_songs.json') as songs:
+    with open(ROOT_CACHE + '/' + category + '_songs.json') as songs:
         temp = json.loads(songs.read())
         return {'songs': temp}
