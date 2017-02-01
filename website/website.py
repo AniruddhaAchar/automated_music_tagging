@@ -18,9 +18,9 @@ app.config.from_object('config')
 api = Api(app)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 scheduler = BackgroundScheduler()  # create a background scheduler task
-scheduler.add_job(cache_featured_playlist, 'interval', minutes=10, id='store_playlist')  # add a job with target=
+scheduler.add_job(cache_featured_playlist, 'interval', minutes=50, id='store_playlist')  # add a job with target=
 # cache_function, interval = 2 minutes
-scheduler.add_job(cache_category_songs, 'interval', minutes=20, id='store_cat')
+scheduler.add_job(cache_category_songs, 'interval', minutes=80, id='store_cat')
 scheduler.start()  # start the scheduler
 
 atexit.register(lambda: scheduler.shutdown())  # stop the scheduler when the server stops

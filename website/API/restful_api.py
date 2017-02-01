@@ -15,10 +15,11 @@ class CategorySongs(Resource):
             abort(404, message="No such category")
         return get_cached_category_songs(category=category)
 
+
 class SearchSongs(Resource):
     def get(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('track', type=str, help='Rate cannot be converted')
+        parser.add_argument('track', type=str, help='track cannot be converted')
         args = parser.parse_args()
         print(args)
         return search_song(args['track'])

@@ -18,18 +18,8 @@ def cache_featured_playlist():
 
 def save_cache(data, file_name):
     if os.path.isfile(ROOT_CACHE + '/' + file_name):  # check if file exists
-        with open(ROOT_CACHE + '/' + file_name, 'r') as fread:  # get the file where the
-            # cache is stored
-            if data == fread.read():  # if new data and cache are same, do nothing
-                return
-    with open(ROOT_CACHE + '/' + file_name, 'w') as fpfile:  # else update the file
-        print("Cleaning data")
-        fpfile.seek(0)
-        fpfile.truncate()
-        fpfile.seek(0, 2)
-        print(fpfile.tell())
-        fpfile.seek(0)
-        fpfile.write(data)
+        with open(ROOT_CACHE + '/' + file_name, 'w') as fpfile:
+            fpfile.write(data)
 
 
 def cache_category_songs():
