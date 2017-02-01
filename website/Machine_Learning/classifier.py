@@ -1,8 +1,9 @@
 from collections import Counter
 from sklearn.externals import joblib
 from config import ROOT_ML
+import numpy as np
 
-activity_map = {1: "dinner", 2: "party", 3: "sleep", 4: "workout"}
+activity_map = {1: "Dinner", 2: "Party", 3: "Sleep", 4: "Workout"}
 # track machine learning algorithms
 scaler_track = joblib.load(ROOT_ML + '/scaler_track.pkl')
 svmclf_track = joblib.load(ROOT_ML + '/svm_Classifier_track.pkl')
@@ -22,6 +23,8 @@ def classify_track(audio_features):
          audio_features['valence'], audio_features['loudness']]
     if None in X:
         return 0
+    X = np.asarray(X)
+    X = X.reshape(1, -1)
     X = scaler_track.transform(X)
     X = X.reshape(1, -1)
     svmPred = svmclf_track.predict(X).tolist()[0]
