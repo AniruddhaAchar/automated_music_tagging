@@ -17,9 +17,8 @@ def cache_featured_playlist():
 
 
 def save_cache(data, file_name):
-    if os.path.isfile(ROOT_CACHE + '/' + file_name):  # check if file exists
-        with open(ROOT_CACHE + '/' + file_name, 'w') as fpfile:
-            fpfile.write(data)
+    with open(ROOT_CACHE + '/' + file_name, 'w') as fpfile:
+        fpfile.write(data)
 
 
 def cache_category_songs():
