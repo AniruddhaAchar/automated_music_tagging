@@ -21,5 +21,7 @@ class SearchSongs(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('track', type=str, help='track cannot be converted')
         args = parser.parse_args()
-        print(args)
-        return search_song(args['track'])
+        if args['track']:
+            return search_song(args['track'])
+        else:
+            abort(404, message="Wrong parameters passed")
