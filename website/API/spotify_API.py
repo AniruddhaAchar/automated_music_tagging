@@ -31,12 +31,14 @@ def get_featured_songs():
             for artist in item.get('track').get('album').get('artists'):
                 artist_names.append(artist.get('name'))
             track_name = item.get('track').get('name')
-            audio_features = sp.audio_features([item.get('track').get('uri')])[0]
+            uri = str(item.get('track').get('uri'))
+            audio_features = sp.audio_features([uri])[0]
             activity_class = classifier.classify_track(audio_features)
             if item.get('external_urls'):
                 external_url = item.get('external_urls').get('spotify')
             else:
                 external_url = None
+            print(external_url)
             details = {'name': track_name, 'artists': artist_names, 'images': images, 'album': album_name,
                        'activity_class': activity_class, 'external_url':external_url}
             if details['activity_class'] == 0:
@@ -60,7 +62,8 @@ def search_song(title):
             external_url = item.get('external_urls').get('spotify')
         else:
             external_url = None
-        audio_features = sp.audio_features([item.get('uri')])[0]
+            uri = str(item.get('uri'))
+        audio_features = sp.audio_features([uri])[0]
         activity_class = classifier.classify_track(audio_features)
         details = {'name': track_name, 'artists': artist_names, 'images': images, 'activity_class': activity_class,
                    'external_url':external_url}
