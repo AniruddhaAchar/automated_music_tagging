@@ -53,7 +53,10 @@ def search_song(title):
         for artist in item.get('album').get('artists'):
             artist_names.append(artist.get('name'))
         track_name = item.get('name')
-        external_url = item.get('external_urls').get('spotify')
+        if item.get('external_urls'):
+            external_url = item.get('external_urls').get('spotify')
+        else:
+            external_url = None
         audio_features = sp.audio_features([item.get('uri')])[0]
         activity_class = classifier.classify_track(audio_features)
         details = {'name': track_name, 'artists': artist_names, 'images': images, 'activity_class': activity_class,
