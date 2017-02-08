@@ -1,14 +1,17 @@
 from collections import Counter
+
+from sklearn.ensemble import VotingClassifier
 from sklearn.externals import joblib
 from config import ROOT_ML
 import numpy as np
-
+from multiprocessing import Pool
 activity_map = {1: "Dinner", 2: "Party", 3: "Sleep", 4: "Workout"}
 # track machine learning algorithms
 scaler_track = joblib.load(ROOT_ML + '/scaler_track.pkl')
 svmclf_track = joblib.load(ROOT_ML + '/svm_Classifier_track.pkl')
 etclf_track = joblib.load(ROOT_ML + '/extra_tree_classifier_track.pkl')
 rfclf_track = joblib.load(ROOT_ML + '/random_forest_Classifier_track.pkl')
+votingclf_track = joblib.load(ROOT_ML+'/voting_classifier_track.pkl')
 
 # audio machine learning algorithms
 scaler_audio = joblib.load(ROOT_ML + '/scaler_audio.pkl')
@@ -27,12 +30,13 @@ def classify_track(audio_features):
     X = X.reshape(1, -1)
     X = scaler_track.transform(X)
     X = X.reshape(1, -1)
-    svmPred = svmclf_track.predict(X).tolist()[0]
-    etPred = etclf_track.predict(X).tolist()[0]
-    rfPred = rfclf_track.predict(X).tolist()[0]
-    predictions = [svmPred, etPred, rfPred]
-    votes = Counter(predictions)
-    activity, count = votes.most_common()[0]
+    #svmPred = svmclf_track.predict(X).tolist()[0]
+    #etPred = etclf_track.predict(X).tolist()[0]
+    #rfPred = rfclf_track.predict(X).tolist()[0]
+    #predictions = [svmPred, etPred, rfPred]
+    #votes = Counter(predictions)
+    #activity, count = votes.most_common()[0]
+    activity = votingclf_track.predict(X).tolist()[0]
     return activity_map[activity]
 
 

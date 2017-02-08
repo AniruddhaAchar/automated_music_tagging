@@ -33,11 +33,12 @@ def get_featured_songs():
             track_name = item.get('track').get('name')
             audio_features = sp.audio_features([item.get('track').get('uri')])[0]
             activity_class = classifier.classify_track(audio_features)
-            if item.get('external_urls'):
-                external_url = item.get('external_urls').get('spotify')
-            else:
-                external_url = None
-            print(external_url)
+            external_url = None
+            try:
+                external_url = item.get('track').get('external_urls').get('spotify')
+            except:
+                print("Error extracting external link")
+
             details = {'name': track_name, 'artists': artist_names, 'images': images, 'album': album_name,
                        'activity_class': activity_class, 'external_url':external_url}
             if details['activity_class'] == 0:
@@ -57,10 +58,11 @@ def search_song(title):
         for artist in item.get('album').get('artists'):
             artist_names.append(artist.get('name'))
         track_name = item.get('name')
-        if item.get('external_urls'):
+        external_url = None
+        try:
             external_url = item.get('external_urls').get('spotify')
-        else:
-            external_url
+        except:
+            print("Error extracting external link")
         audio_features = sp.audio_features([item.get('uri')])[0]
         activity_class = classifier.classify_track(audio_features)
         details = {'name': track_name, 'artists': artist_names, 'images': images, 'activity_class': activity_class,
@@ -99,7 +101,11 @@ def get_category_songs(category):
         album_name = recommendation.get('album').get('name')
         audio_features = sp.audio_features(recommendation.get('uri'))[0]
         activity_class = classifier.classify_track(audio_features)
+        try:
+            external_url = recommendation.get('external_urls').get('spotify')
+        except:
+            print("Error extracting external link")
         details = {'name': track_name, 'artists': artist_names, 'images': images, 'activity_class': activity_class,
-                   'album_name': album_name}
+                   'album_name': album_name, 'external_url':external_url}
         track_details.append(details)
     return json.dumps(track_details)
