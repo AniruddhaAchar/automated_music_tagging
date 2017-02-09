@@ -1,12 +1,9 @@
 from collections import Counter
 
-from sklearn.ensemble import VotingClassifier
 from sklearn.externals import joblib
 from config import ROOT_ML
 import numpy as np
-from multiprocessing import Pool
 
-from profiler.timer import fn_timer
 
 activity_map = {1: "Dinner", 2: "Party", 3: "Sleep", 4: "Workout"}
 # track machine learning algorithms
