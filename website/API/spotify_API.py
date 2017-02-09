@@ -1,8 +1,14 @@
 import json
+import asyncio
+
+import gevent
+from gevent import Greenlet
 
 from Machine_Learning import classifier
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+
+from profiler.timer import fn_timer
 
 user_name = "Aniruddha"
 scope = 'user-library-read'
@@ -13,37 +19,30 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 track_details = []
 
 
-def get_featured_songs():
-    """
-    This function extracts song's details from the featured play lists on Spotify.
-     Song details contains information about the artist, title, album, images
-    :return: a list of song details.
-    """
-    featured_play_lists = sp.featured_playlists(country='US', limit=10).get('playlists').get('items')
-    for featured_playlist in featured_play_lists:
-        play_list_details = sp.user_playlist_tracks(playlist_id=featured_playlist.get('id'),
-                                                    user=featured_playlist.get('owner').get('id'), limit=4)
-        for item in play_list_details.get('items'):
-            artist_names = []
-            album_name = item.get('track').get('album').get('name')
-            images = item.get('track').get('album').get(
-                'images')  # a list if images with the height, width and the url to the image
-            for artist in item.get('track').get('album').get('artists'):
-                artist_names.append(artist.get('name'))
-            track_name = item.get('track').get('name')
-            audio_features = sp.audio_features([item.get('track').get('uri')])[0]
-            activity_class = classifier.classify_track(audio_features)
-            external_url = None
-            try:
-                external_url = item.get('track').get('external_urls').get('spotify')
-            except:
-                print("Error extracting external link")
+async def get_featured_songs_detail(item):
+    artist_names = []
+    album_name = item.get('track').get('album').get('name')
+    images = item.get('track').get('album').get(
+        'images')  # a list if images with the height, width and the url to the image
+    for artist in item.get('track').get('album').get('artists'):
+        artist_names.append(artist.get('name'))
+    track_name = item.get('track').get('name')
+    jobs = [Greenlet.spawn(sp.audio_features, [item.get('track').get('uri')])]
+    gevent.joinall(jobs)
+    audio_features = jobs[0].value
+    activity_class = classifier.classify_track(audio_features[0])
+    external_url = None
+    try:
+        external_url = item.get('track').get('external_urls').get('spotify')
+    except:
+        print("Error extracting external link")
 
-            details = {'name': track_name, 'artists': artist_names, 'images': images, 'album': album_name,
-                       'activity_class': activity_class, 'external_url':external_url}
-            if details['activity_class'] == 0:
-                continue
-            track_details.append(details)
+    details = {'name': track_name, 'artists': artist_names, 'images': images, 'album': album_name,
+               'activity_class': activity_class, 'external_url': external_url}
+    if details['activity_class'] == 0:
+        pass
+    print(details)
+    return details
 
     return json.dumps(track_details)
 
@@ -66,7 +65,7 @@ def search_song(title):
         audio_features = sp.audio_features([item.get('uri')])[0]
         activity_class = classifier.classify_track(audio_features)
         details = {'name': track_name, 'artists': artist_names, 'images': images, 'activity_class': activity_class,
-                   'external_url':external_url}
+                   'external_url': external_url}
         track_details.append(details)
     return track_details
 
@@ -106,6 +105,6 @@ def get_category_songs(category):
         except:
             print("Error extracting external link")
         details = {'name': track_name, 'artists': artist_names, 'images': images, 'activity_class': activity_class,
-                   'album_name': album_name, 'external_url':external_url}
+                   'album_name': album_name, 'external_url': external_url}
         track_details.append(details)
     return json.dumps(track_details)
