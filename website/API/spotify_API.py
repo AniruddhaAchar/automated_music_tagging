@@ -20,7 +20,7 @@ def get_featured_songs():
      Song details contains information about the artist, title, album, images
     :return: a list of song details.
     """
-    featured_play_lists = sp.featured_playlists(country='US', limit=5).get('playlists').get('items')
+    featured_play_lists = sp.featured_playlists(country='US', limit=10).get('playlists').get('items')
     for featured_playlist in featured_play_lists:
         play_list_details = sp.user_playlist_tracks(playlist_id=featured_playlist.get('id'),
                                                     user=featured_playlist.get('owner').get('id'), limit=4)
