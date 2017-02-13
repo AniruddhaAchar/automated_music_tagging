@@ -19,6 +19,7 @@ def cache_featured_playlist():
 def save_cache(data, file_name):
     if not os.path.isdir(ROOT_CACHE):
         os.makedirs(ROOT_CACHE)
+    os.remove(ROOT_CACHE + '/' + file_name)
     with open(ROOT_CACHE + '/' + file_name, 'w') as fpfile:
         fpfile.write(data)
 
