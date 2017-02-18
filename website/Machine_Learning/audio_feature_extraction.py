@@ -13,7 +13,6 @@ def get_audio_features(file_name):
     chroma = librosa.feature.chroma_stft(y=y, sr=sr)
     if_gram, D = librosa.ifgram(y)
     S = np.abs(librosa.stft(y))
-    mag_SC = librosa.feature.spectral_centroid(S=np.abs(D), freq=if_gram)
     mfcc = librosa.feature.mfcc(y=y, sr=sr)
     rmse = librosa.feature.rmse(y=y)
     contrast = librosa.feature.spectral_contrast(S=S, sr=sr)
