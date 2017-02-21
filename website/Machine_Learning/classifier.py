@@ -42,6 +42,8 @@ def classify_track(audio_features):
 
 def classify_audio(mfcc, scem, scom, srom, sbwm, tempo, rmse):
     X = [mfcc, scem, scom, srom, sbwm, tempo, rmse]
+    X = np.array(X)
+    X.reshape(1,-1)
     X = scaler_audio.transform(X)
     X = X.reshape(1, -1)
     svmPred = svmclf_audio.predict(X).tolist()[0]
