@@ -100,11 +100,6 @@ MLYpred = MLYpred.tolist()
 votingPred = eclf.predict(XTest)
 votingPred = votingPred.tolist()
 combinedYPred = []
-for s, e, r in zip(svmlist, etlist, rflist):
-    predictions = [s, e, r]
-    votes = Counter(predictions)
-    activity, count = votes.most_common()[0]
-    combinedYPred.append(activity)
 
 
 def getconfusion_matrix(classifier):

@@ -57,7 +57,7 @@ def get_audio_features(file_path):
     zero_crossing = librosa.feature.zero_crossing_rate(y)
     onset_env = librosa.onset.onset_strength(y, sr=sr)
     tempo = librosa.beat.estimate_tempo(onset_env, sr=sr)
-    return {"mfcc": mfcc, "rsme": rmse, "spectral_centroid": spectral_centroid,
+    return {"mfcc": mfcc, "rmse": rmse, "spectral_centroid": spectral_centroid,
             "spectral_bandwidth": spectral_bandwidth, "spectral_rolloff": spectral_rolloff,
             "zero_crossing": zero_crossing, "tempo": tempo, "S":S}
 

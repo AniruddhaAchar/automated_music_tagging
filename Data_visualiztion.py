@@ -32,6 +32,27 @@ def plot_mfcc(mfcc, title=""):
     plt.title('MFCC of ' + title)
     plt.tight_layout()
 
+def plot_mfcc_histogram(mfcc, title):
+    if title == 'all':
+        plt.hist(mfcc,bins=50, log=True, stacked=True, label=['party', 'dinner', 'sleep', 'workout'], alpha=0.5)
+    else:
+        plt.hist(mfcc, bins=50, log=True, alpha=0.5)
+    plt.title("MFCC Histogram "+title)
+    plt.xlabel("Value")
+    plt.ylabel("Frequency")
+    plt.legend()
+    plt.tight_layout()
+
+def plot_rmse_histogram(rmse, title):
+    if title == 'all':
+        plt.hist(rmse, bins=50, log=True, stacked=True, label=['party', 'dinner', 'sleep', 'workout'], alpha=0.5)
+    else:
+        plt.hist(rmse, bins=50, log=True, alpha=0.5)
+    plt.title("RMSE Histogram "+title)
+    plt.xlabel("Value")
+    plt.ylabel("Frequency")
+    plt.legend()
+    plt.tight_layout()
 
 def plot_rmse(rmse, S, title=""):
     plt.figure()
@@ -48,7 +69,7 @@ def plot_rmse(rmse, S, title=""):
 
 def plot_spectral_centroid(cent, S, title=""):
     plt.figure()
-    p1 = plt.subplot(2, 1, 1)
+    plt.subplot(2, 1, 1)
     plt.semilogy(cent.T, label='Spectral centroid')
     plt.ylabel('Hz')
     plt.xticks([])
