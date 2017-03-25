@@ -1,3 +1,4 @@
+import json
 import os
 
 from flask import Flask, jsonify
@@ -55,7 +56,8 @@ def upload():
             if not os.path.isdir(app.config['UPLOAD_FOLDER']):
                 os.makedirs(app.config['UPLOAD_FOLDER'])
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return "file saved successfully " + get_audio_features(filename)
+            output = get_audio_features(filename)
+            return render_template('upload.html', activity = output)
     if request.method == 'GET':
         return render_template('upload.html')
 
